@@ -1,0 +1,20 @@
+name: Archive Expired Demo
+
+on:
+  schedule:
+    # Day after expiration (2026-03-07 + 1 day)
+    - cron: '0 0 8 3 *'
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Archive Repository
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              archived: true
+            })
