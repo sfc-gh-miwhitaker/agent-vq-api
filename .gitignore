@@ -1,7 +1,0 @@
-/plan.md
-.builddemo-state.json
-.pids/
-__pycache__/
-*.pyc
-.DS_Store
-.cursor/

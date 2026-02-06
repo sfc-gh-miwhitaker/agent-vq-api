@@ -9,7 +9,7 @@ The SQL API uses programmatic access tokens (PAT) for authentication:
 ```bash
 # Set your account and token
 export SNOWFLAKE_ACCOUNT="your-account"
-export SNOWFLAKE_TOKEN="your-programmatic-access-token"
+export SNOWFLAKE_PAT="your-programmatic-access-token"
 ```
 
 ## API Endpoint
@@ -32,7 +32,7 @@ POST https://<account>.snowflakecomputing.com/api/v2/statements
 
 ```bash
 curl -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/statements" \
-  -H "Authorization: Bearer ${SNOWFLAKE_TOKEN}" \
+  -H "Authorization: Bearer ${SNOWFLAKE_PAT}" \
   -H "Content-Type: application/json" \
   -H "X-Snowflake-Authorization-Token-Type: PROGRAMMATIC_ACCESS_TOKEN" \
   -d '{
@@ -48,7 +48,7 @@ curl -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/stateme
 
 ```bash
 curl -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/statements" \
-  -H "Authorization: Bearer ${SNOWFLAKE_TOKEN}" \
+  -H "Authorization: Bearer ${SNOWFLAKE_PAT}" \
   -H "Content-Type: application/json" \
   -H "X-Snowflake-Authorization-Token-Type: PROGRAMMATIC_ACCESS_TOKEN" \
   -d '{
@@ -64,7 +64,7 @@ curl -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/stateme
 
 ```bash
 curl -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/statements" \
-  -H "Authorization: Bearer ${SNOWFLAKE_TOKEN}" \
+  -H "Authorization: Bearer ${SNOWFLAKE_PAT}" \
   -H "Content-Type: application/json" \
   -H "X-Snowflake-Authorization-Token-Type: PROGRAMMATIC_ACCESS_TOKEN" \
   -d '{
@@ -83,7 +83,7 @@ The SQL API is asynchronous. After submitting a statement, poll for results:
 ```bash
 # Submit and capture the statement handle
 HANDLE=$(curl -s -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/statements" \
-  -H "Authorization: Bearer ${SNOWFLAKE_TOKEN}" \
+  -H "Authorization: Bearer ${SNOWFLAKE_PAT}" \
   -H "Content-Type: application/json" \
   -H "X-Snowflake-Authorization-Token-Type: PROGRAMMATIC_ACCESS_TOKEN" \
   -d '{
@@ -94,7 +94,7 @@ HANDLE=$(curl -s -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/ap
 
 # Poll for results
 curl -s "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/statements/${HANDLE}" \
-  -H "Authorization: Bearer ${SNOWFLAKE_TOKEN}" \
+  -H "Authorization: Bearer ${SNOWFLAKE_PAT}" \
   -H "X-Snowflake-Authorization-Token-Type: PROGRAMMATIC_ACCESS_TOKEN" | jq .
 ```
 
@@ -120,7 +120,7 @@ jq -c '.[]' "$VQ_FILE" | while read -r query; do
     echo "Loading verified query: ${NAME}"
 
     curl -s -X POST "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/statements" \
-      -H "Authorization: Bearer ${SNOWFLAKE_TOKEN}" \
+      -H "Authorization: Bearer ${SNOWFLAKE_PAT}" \
       -H "Content-Type: application/json" \
       -H "X-Snowflake-Authorization-Token-Type: PROGRAMMATIC_ACCESS_TOKEN" \
       -d "{

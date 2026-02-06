@@ -63,9 +63,13 @@ Agents reference semantic views by name, not by internal ID. When a semantic vie
 ```
 agent-vq-api/
 ├── README.md
+├── LICENSE
 ├── deploy_all.sql
 ├── teardown_all.sql
 ├── requirements.txt                   # Python dependencies for CLI tool
+├── .github/
+│   └── workflows/
+│       └── expire-demo.yml            # Auto-archive after expiration
 ├── diagrams/
 │   └── data-flow.md
 ├── sql/
@@ -86,7 +90,8 @@ agent-vq-api/
 │   └── verified_queries.json          # Sample queries for bulk loading
 └── docs/
     ├── 01-GETTING-STARTED.md
-    └── 02-SQL-API-INTEGRATION.md
+    ├── 02-SQL-API-INTEGRATION.md
+    └── Semantic_View_Verified_Queries_Guide.pdf
 ```
 
 ## Best Practices
