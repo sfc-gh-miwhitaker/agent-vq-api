@@ -78,6 +78,12 @@ SELECT SYSTEM$READ_YAML_FROM_SEMANTIC_VIEW($SV_NAME) AS yaml_spec;
 ----------------------------------------------------------------------
 -- STEP 7: Update an existing verified query (same name = replace)
 ----------------------------------------------------------------------
+
+-- Snapshot before the update
+CREATE OR REPLACE TEMPORARY TABLE VQ_BEFORE AS
+    SELECT NAME, QUESTION, SQL_TEXT
+    FROM TABLE(LIST_VERIFIED_QUERIES($SV_NAME));
+
 CALL ADD_VERIFIED_QUERY(
     $SV_NAME,
     'monthly_revenue',
@@ -90,8 +96,14 @@ CALL ADD_VERIFIED_QUERY(
      ORDER BY 1'
 );
 
--- Verify the update
-CALL LIST_VERIFIED_QUERIES($SV_NAME);
+-- Diff: before vs after for the updated query
+SELECT 'BEFORE' AS VERSION, b.QUESTION, b.SQL_TEXT
+FROM VQ_BEFORE b
+WHERE b.NAME = 'monthly_revenue'
+UNION ALL
+SELECT 'AFTER' AS VERSION, a.QUESTION, a.SQL_TEXT
+FROM TABLE(LIST_VERIFIED_QUERIES($SV_NAME)) a
+WHERE a.NAME = 'monthly_revenue';
 
 
 ----------------------------------------------------------------------
