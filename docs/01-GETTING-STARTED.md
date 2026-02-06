@@ -141,6 +141,56 @@ When writing SQL for verified queries:
  FROM SNOWFLAKE_EXAMPLE.VQ_API.RAW_ORDERS GROUP BY 1 ORDER BY 2 DESC'
 ```
 
+## External API Management
+
+After deploying the Snowflake objects, you can manage verified queries from any external system using the Python CLI.
+
+### Setup
+
+```bash
+pip install -r requirements.txt
+
+export SNOWFLAKE_ACCOUNT='myorg-myaccount'
+export SNOWFLAKE_PAT='your-programmatic-access-token'
+```
+
+### Commands
+
+```bash
+# List current verified queries
+python tools/vq_manager.py list
+
+# Add a single query
+python tools/vq_manager.py add monthly_revenue \
+    "What is the total revenue by month?" \
+    "SELECT DATE_TRUNC('month', __ORDERS.ORDER_DATE) AS month, SUM(__ORDERS.TOTAL_AMOUNT) AS total_revenue FROM __ORDERS GROUP BY 1 ORDER BY 1"
+
+# Bulk load from the sample JSON file
+python tools/vq_manager.py bulk-load tools/verified_queries.json
+
+# Backup current queries to a file
+python tools/vq_manager.py backup my_backup.json
+
+# Remove a query
+python tools/vq_manager.py remove monthly_revenue
+```
+
+### Custom Semantic View
+
+By default the CLI targets `SNOWFLAKE_EXAMPLE.SEMANTIC_MODELS.SV_VQ_API_ORDERS`. Override with:
+
+```bash
+export SNOWFLAKE_SV='MY_DB.MY_SCHEMA.MY_SEMANTIC_VIEW'
+```
+
+### CI/CD Pattern
+
+Use `bulk-load` + `backup` in a pipeline to version-control your verified queries:
+
+1. Store `verified_queries.json` in source control
+2. On merge to main, run `python tools/vq_manager.py bulk-load verified_queries.json`
+3. Before changes, run `python tools/vq_manager.py backup` to snapshot the current state
+
 ## Cleanup
 
 Run `teardown_all.sql` in Snowsight to remove all demo objects.

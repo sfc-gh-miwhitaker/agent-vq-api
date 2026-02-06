@@ -1,0 +1,27 @@
+[
+  {
+    "name": "monthly_revenue",
+    "question": "What is the total revenue by month?",
+    "sql": "SELECT DATE_TRUNC('month', __ORDERS.ORDER_DATE) AS month, SUM(__ORDERS.TOTAL_AMOUNT) AS total_revenue FROM __ORDERS GROUP BY 1 ORDER BY 1"
+  },
+  {
+    "name": "revenue_by_region",
+    "question": "Which region has the most revenue?",
+    "sql": "SELECT __CUSTOMERS.REGION, SUM(__ORDERS.TOTAL_AMOUNT) AS total_revenue, COUNT(__ORDERS.ORDER_ID) AS order_count FROM __ORDERS JOIN __CUSTOMERS ON __ORDERS.CUSTOMER_ID = __CUSTOMERS.CUSTOMER_ID GROUP BY 1 ORDER BY 2 DESC"
+  },
+  {
+    "name": "top_products",
+    "question": "What are the top products by total revenue?",
+    "sql": "SELECT __ORDERS.PRODUCT, SUM(__ORDERS.TOTAL_AMOUNT) AS total_revenue, COUNT(__ORDERS.ORDER_ID) AS order_count FROM __ORDERS GROUP BY 1 ORDER BY 2 DESC"
+  },
+  {
+    "name": "enterprise_orders",
+    "question": "How many orders come from enterprise customers?",
+    "sql": "SELECT COUNT(__ORDERS.ORDER_ID) AS enterprise_orders FROM __ORDERS JOIN __CUSTOMERS ON __ORDERS.CUSTOMER_ID = __CUSTOMERS.CUSTOMER_ID WHERE __CUSTOMERS.SEGMENT = 'Enterprise'"
+  },
+  {
+    "name": "avg_order_by_segment",
+    "question": "What is the average order value by customer segment?",
+    "sql": "SELECT __CUSTOMERS.SEGMENT, AVG(__ORDERS.TOTAL_AMOUNT) AS avg_order_value, COUNT(__ORDERS.ORDER_ID) AS order_count FROM __ORDERS JOIN __CUSTOMERS ON __ORDERS.CUSTOMER_ID = __CUSTOMERS.CUSTOMER_ID GROUP BY 1 ORDER BY 2 DESC"
+  }
+]

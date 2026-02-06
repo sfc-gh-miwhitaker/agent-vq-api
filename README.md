@@ -12,14 +12,17 @@ Programmatic management of Cortex Analyst verified queries through stored proced
 ## First Time Here?
 
 1. **Deploy** - Copy `deploy_all.sql` into Snowsight, click "Run All"
-2. **Test** - Open `sql/05_demo/01_demo_workflow.sql` and run the examples
-3. **Cleanup** - Run `teardown_all.sql` when done
+2. **Test in Snowsight** - Open `sql/05_demo/01_demo_workflow.sql` and run the examples
+3. **Test externally** - Use `tools/vq_manager.py` to manage queries from the command line
+4. **Cleanup** - Run `teardown_all.sql` when done
 
 ## What This Demo Shows
 
 Cortex Analyst uses verified queries to improve response accuracy. While Snowsight supports adding verified queries through the UI, there is no native `ALTER SEMANTIC VIEW ADD VERIFIED QUERY` SQL command.
 
-This demo provides three stored procedures that enable programmatic management:
+This demo provides two integration paths:
+
+### Path 1: Stored Procedures (Snowsight / SQL)
 
 | Procedure | Description |
 |-----------|-------------|
@@ -27,9 +30,22 @@ This demo provides three stored procedures that enable programmatic management:
 | `LIST_VERIFIED_QUERIES` | List all verified queries in a semantic view |
 | `REMOVE_VERIFIED_QUERY` | Remove a verified query by name |
 
+### Path 2: External CLI (SQL API)
+
+```bash
+pip install -r requirements.txt
+export SNOWFLAKE_ACCOUNT='myorg-myaccount'
+export SNOWFLAKE_PAT='your-programmatic-access-token'
+
+python tools/vq_manager.py list
+python tools/vq_manager.py add monthly_revenue "What is total revenue by month?" "SELECT ..."
+python tools/vq_manager.py bulk-load tools/verified_queries.json
+python tools/vq_manager.py backup queries_backup.json
+```
+
 ### How It Works
 
-The procedures leverage two system functions:
+Both paths leverage two system functions:
 
 - `SYSTEM$READ_YAML_FROM_SEMANTIC_VIEW` - Reads the current YAML specification
 - `SYSTEM$CREATE_SEMANTIC_VIEW_FROM_YAML` - Creates/replaces a semantic view from YAML (with COPY GRANTS)
@@ -49,6 +65,7 @@ agent-vq-api/
 ├── README.md
 ├── deploy_all.sql
 ├── teardown_all.sql
+├── requirements.txt                   # Python dependencies for CLI tool
 ├── diagrams/
 │   └── data-flow.md
 ├── sql/
@@ -64,6 +81,9 @@ agent-vq-api/
 │   │   └── 03_remove_verified_query.sql
 │   └── 05_demo/
 │       └── 01_demo_workflow.sql
+├── tools/
+│   ├── vq_manager.py                  # External CLI via SQL API
+│   └── verified_queries.json          # Sample queries for bulk loading
 └── docs/
     ├── 01-GETTING-STARTED.md
     └── 02-SQL-API-INTEGRATION.md
