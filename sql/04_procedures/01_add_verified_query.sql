@@ -72,10 +72,11 @@ def add_verified_query(
         sv_spec['verified_queries'] = []
 
     # Check for existing query with same name - update or append
-    existing_names = [vq.get('name') for vq in sv_spec['verified_queries']]
-    if query_name in existing_names:
+    # Case-insensitive: Snowflake may uppercase names in YAML round-trip
+    existing_names = [vq.get('name', '').upper() for vq in sv_spec['verified_queries']]
+    if query_name.upper() in existing_names:
         for i, vq in enumerate(sv_spec['verified_queries']):
-            if vq.get('name') == query_name:
+            if vq.get('name', '').upper() == query_name.upper():
                 sv_spec['verified_queries'][i] = new_vq
                 break
         action = "updated"

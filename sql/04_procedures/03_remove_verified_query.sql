@@ -57,11 +57,11 @@ def remove_verified_query(
     if 'verified_queries' not in sv_spec or not sv_spec['verified_queries']:
         return f"Error: No verified queries found in '{semantic_view_name}'"
 
-    # Find and remove the named query
+    # Find and remove the named query (case-insensitive)
     original_count = len(sv_spec['verified_queries'])
     sv_spec['verified_queries'] = [
         vq for vq in sv_spec['verified_queries']
-        if vq.get('name') != query_name
+        if vq.get('name', '').upper() != query_name.upper()
     ]
 
     if len(sv_spec['verified_queries']) == original_count:
