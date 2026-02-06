@@ -2,10 +2,9 @@
 DEPLOY ALL - Verified Query API
 Author: SE Community | Expires: 2026-03-07
 INSTRUCTIONS: Open in Snowsight -> Click "Run All"
-PREREQUISITE: SFE_GIT_API_INTEGRATION must exist (shared infrastructure)
 ==============================================================================*/
 
--- 1. Bootstrap warehouse (needed before any procedural/fetch statements)
+-- 1. Bootstrap infrastructure (warehouse + API integration)
 USE ROLE SYSADMIN;
 
 CREATE DATABASE IF NOT EXISTS SNOWFLAKE_EXAMPLE;
@@ -18,6 +17,18 @@ CREATE WAREHOUSE IF NOT EXISTS SFE_VQ_API_WH
   COMMENT = 'DEMO: Verified Query API compute (Expires: 2026-03-07)';
 
 USE WAREHOUSE SFE_VQ_API_WH;
+
+USE ROLE ACCOUNTADMIN;
+
+CREATE API INTEGRATION IF NOT EXISTS SFE_GIT_API_INTEGRATION
+  API_PROVIDER = git_https_api
+  API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-miwhitaker')
+  ENABLED = TRUE
+  COMMENT = 'Git integration for SFE demo repos';
+
+GRANT USAGE ON INTEGRATION SFE_GIT_API_INTEGRATION TO ROLE SYSADMIN;
+
+USE ROLE SYSADMIN;
 
 -- 2. SSOT: Expiration date - change ONLY here, then run: sync-expiration
 SET DEMO_EXPIRES = '2026-03-07';
