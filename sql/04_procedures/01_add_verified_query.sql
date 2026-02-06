@@ -27,8 +27,8 @@ LANGUAGE PYTHON
 RUNTIME_VERSION = '3.11'
 PACKAGES = ('snowflake-snowpark-python', 'pyyaml')
 HANDLER = 'add_verified_query'
-EXECUTE AS CALLER
 COMMENT = 'DEMO: Add or update a verified query in a semantic view (Expires: 2026-03-07)'
+EXECUTE AS CALLER
 AS
 $$
 import yaml

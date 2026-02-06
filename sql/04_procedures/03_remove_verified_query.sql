@@ -21,8 +21,8 @@ LANGUAGE PYTHON
 RUNTIME_VERSION = '3.11'
 PACKAGES = ('snowflake-snowpark-python', 'pyyaml')
 HANDLER = 'remove_verified_query'
-EXECUTE AS CALLER
 COMMENT = 'DEMO: Remove a verified query from a semantic view (Expires: 2026-03-07)'
+EXECUTE AS CALLER
 AS
 $$
 import yaml

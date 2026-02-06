@@ -19,8 +19,8 @@ LANGUAGE PYTHON
 RUNTIME_VERSION = '3.11'
 PACKAGES = ('snowflake-snowpark-python', 'pyyaml')
 HANDLER = 'list_verified_queries'
-EXECUTE AS CALLER
 COMMENT = 'DEMO: List all verified queries in a semantic view (Expires: 2026-03-07)'
+EXECUTE AS CALLER
 AS
 $$
 import yaml
